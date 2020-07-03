@@ -1,5 +1,6 @@
 import hashlib
 from random import randint as rdn
+import json
 #Aprova eu aí men, to precisando de emprego :(
 
 class Gerador:
@@ -42,5 +43,5 @@ if __name__ == "__main__":
     gen.carregarNomes()
     arquivo = open("dados.json","w")
     for i in range(1000):
-        arquivo.write(f"{gen.gerarFamilia()}\n")
+        arquivo.write(f"{json.dumps(gen.gerarFamilia(), ensure_ascii=False)}\n")
     arquivo.close()
