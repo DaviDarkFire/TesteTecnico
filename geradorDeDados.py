@@ -7,6 +7,7 @@ class Gerador:
     def __init__(self):
         self.nomes = []
         self.qtdFamilias = 0
+        self.qtdPessoas = 0
 
     def gerarHash(self, semente):
         return hashlib.sha1(semente.encode('utf-8')).hexdigest()
@@ -15,13 +16,16 @@ class Gerador:
         idFamilia = self.gerarHash(f"familia{self.qtdFamilias}")
         self.qtdFamilias += 1
         qtdMembros = rdn(0,5) #máximo de 7 pessoas na família
-        id1 = self.gerarHash(f"pessoa{0}")
-        id2 = self.gerarHash(f"pessoa{1}")
+        id1 = self.gerarHash(f"pessoa{self.qtdPessoas}")
+        self.qtdPessoas += 1
+        id2 = self.gerarHash(f"pessoa{self.qtdPessoas}")
+        self.qtdPessoas += 1
         pessoas = []
         pessoas.append({"id": id1,"nome": self.nomes[rdn(0,99)],"tipo": "Pretendente", "dataDeNascimento": self.gerarDataDeIdade(rdn(25,55))})
         pessoas.append({"id": id2,"nome": self.nomes[rdn(0,99)],"tipo": "Cônjugue", "dataDeNascimento": self.gerarDataDeIdade(rdn(25,55))})
         for i in range(qtdMembros):
-            pessoas.append({"id": self.gerarHash(f"pessoa{i+2}"),"nome": self.nomes[rdn(0,99)],"tipo": "Dependente", "dataDeNascimento": self.gerarDataDeIdade(rdn(0,23))})
+            pessoas.append({"id": self.gerarHash(f"pessoa{self.qtdPessoas}"),"nome": self.nomes[rdn(0,99)],"tipo": "Dependente", "dataDeNascimento": self.gerarDataDeIdade(rdn(0,23))})
+            self.qtdPessoas += 1
 
         rendas = []
         rendas.append({"pessoaId": id1, "valor": rdn(500,1500)})
