@@ -2,60 +2,57 @@ from dataloader import Dataloader
 from geradorDeDados import Gerador
 import json
 import time
+from metricas import Metricas
+from contemplados import Contemplados
+
+'''
+    Classe criada pra encapsular todas as outras e contruir uma interface com o
+    usuário.
+'''
+
+FAMILIAS = 1000 #alterar para a quantidade de famílias que quiser gerar e processar
 
 class Run:
 
-    def carregarDados(self, qtdFamilias):
-        dat  = Dataloader("dados.json", qtdFamilias)
-        return dat.abrirArquivo()
+    @classmethod
+    def imprimirFamilias(self, familias):
+        for familia in familias:
+            print("\n")
+            print(f"#### ID: {familia.id}")
+            print(f"Renda total da família: {familia.rendaTotal}")
+            print(f"Total de membros: {len(familia.pessoas)}")
+            print(f"Total de pontos: {familia.pontos}")
 
-    def gerarEstatisticas(self):
-        return
-
-    def gerarDados(self, qtdFamilias):
-        gen = Gerador()
-        gen.carregarNomes()
-        arquivo = open("dados.json","w")
-        flag = 0
-
-        arquivo.write("[")
-        for i in range(qtdFamilias):
-            if flag:
-                arquivo.write(",")
-            flag = 1
-            arquivo.write(f"{json.dumps(gen.gerarFamilia(), ensure_ascii=False)}\n")
-        arquivo.write("]")
-        arquivo.close()
-
+    @classmethod
     def exibirMenu(self):
-        print("Menu:\n 1 - Gerar Dados\n 2 - Exibir Classificação das Famílias\n 3 - Gerar Estatísticas dos Dados\n 4 - Exibir esse Menu\n 5 - Sair")
+        print("Menu:\n 1 - Gerar Dados\n 2 - Exibir Classificação das Famílias\n 3 - Exibir esse Menu\n Ctrl+c - Sair")
 
-    def exibirPontuacoes(self, listaFamilias):
-        listaFamilias.sort(key=lambda x: x.pontos, reverse=True)
-        for i in listaFamilias:
-            print(i.pontos)
-        return 0
 
 if __name__ == "__main__":
-    run = Run()
+    Run.exibirMenu()
     while True:
+
         try:
             tecla = input('Tecla do Menu e depois Enter:\n')
         except:
             print("\nCtrl+c, saindo.")
             break
+
         if tecla == '1':
-            run.gerarDados(1000000)
-        if tecla == '2':
-            aux = time.time()
-            run.exibirPontuacoes(run.carregarDados(1000000))
-            print(time.time()-aux)
-            #print(run.exibirPontuacoes(run.carregarDados(100)))
-            #print(run.carregarDados(300))
-        if tecla == '3':
-            print("Em construção")
-        if tecla == '4':
-            print("Em construção")
-        if tecla == '5':
-            print("Em construção")
-            break
+            gen = Gerador()
+            gen.gerarDados(FAMILIAS)
+            Run.exibirMenu()
+
+        elif tecla == '2':
+            dat  = Dataloader("dados.json", FAMILIAS)
+            contempladas = dat.abrirArquivo()
+            contempladas = Metricas.elegerFamilias(contempladas)
+            Run.imprimirFamilias(contempladas)
+
+            cont = Contemplados()
+            cont.criarListaContemplados(contempladas)
+            cont.exportContemplados()
+            Run.exibirMenu()
+
+        elif tecla == '3':
+            Run.exibirMenu()

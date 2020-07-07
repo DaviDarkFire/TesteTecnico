@@ -1,3 +1,9 @@
+from datetime import date
+import json
+'''
+    Classe responsável por tratar e exportar os atributos da familia que
+    foi contemplada
+'''
 
 class FamiliaContemplada:
     def __init__(self, idFamilia, criteriosAtend, pontosTot, dataSelec):
@@ -10,11 +16,23 @@ class Contemplados:
     def __init__(self):
         self.familiasContempladas = []
 
-    def adicionarFamilia(self, familiaContemplada):
-        self.familiasContempladas.append(familiaContemplada)
+    def criarListaContemplados(self, familias):
+        dataSelec = date.today().strftime("%Y-%b-%d")
+        for fam in familias:
+            familia = FamiliaContemplada(fam.id, fam.qtdCriteriosAtendidos, fam.pontos, dataSelec)
+            self.familiasContempladas.append(familia)
 
-if __name__ == "__main__":
-    contemp = Contemplados()
-    familia = FamiliaContemplada(1,3,10,"2020-07-03")
-    contemp.adicionarFamilia(familia)
-    print(contemp.familiasContempladas[0].dataSelec)
+    def exportContemplados(self):
+        saida = open("contemplados.json","w")
+        flag = 0
+        saida.write("[")
+        for familia in self.familiasContempladas:
+            if flag:
+                saida.write(",")
+            flag = 1
+            saida.write("\n")
+            saida.write(json.dumps({"id": familia.idFamilia,"qtdCriterios": familia.criteriosAtend, "pontos": familia.pontosTot, "data": familia.dataSelec}, ensure_ascii=False))
+        saida.write("]")
+        saida.close()
+
+

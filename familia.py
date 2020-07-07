@@ -1,4 +1,10 @@
-
+'''
+    Classe responsável por armazenar os atributos de familia e alguns
+    métodos relacionados, como cálculo de idade baseado na data de nascimento,
+    verificação da maioridade dos dependentes, cálculo da renda total da família
+    e cálculo dos seus pontos.
+'''
+from metricas import Metricas
 class Familia:
     def __init__(self, id, pessoas, rendas, status):
         self.id = id
@@ -6,8 +12,9 @@ class Familia:
         self.rendas = rendas
         self.status = status
         self.pontos = 0 #indica os pontos da família
-        self.elegivel = self.consegueElegibilidade() #indica se a família é elegível para participar: 0 não elegível, 1 elegível
+        self.elegivel = Metricas.consegueElegibilidade(self.status) #indica se a família é elegível para participar: 0 não elegível, 1 elegível
         self.rendaTotal = self.calcRenda()
+        self.qtdCriteriosAtendidos = 3 #colocar o máximo e decrementar caso algum não seja atendido
 
         if(self.elegivel): #não preciso gastar recurso computacional se a família não for elegível
             self.pontos = self.calcPontos()
@@ -39,6 +46,8 @@ class Familia:
             pontos += 3
         elif self.rendaTotal > 1500 and self.rendaTotal <= 2000:
             pontos += 1
+        else:
+            self.qtdCriteriosAtendidos -= 1
 
         idade = self.pretendenteIdade()
         if idade >= 45:
@@ -51,14 +60,9 @@ class Familia:
         qtdDependente = self.contaDependente()
         if qtdDependente >= 3:
             pontos += 3
-        elif qtdDependente < 3:
+        elif qtdDependente < 3 and qtdDependente >= 1:
             pontos += 2
+        else:
+            self.qtdCriteriosAtendidos -= 1
 
         return pontos
-    def consegueElegibilidade(self):
-        if (self.status == 0): #status igual a 0 é o único elegível pra conseguir as casas
-            return 1
-        return 0 #toda possiblilidade que não seja zero significa não elegível
-
-if __name__ == "__main__":
-    print("em construção")

@@ -41,18 +41,16 @@ class Gerador:
         for linha in arquivo.readlines():
             self.nomes.append(linha[:-1])
 
+    def gerarDados(self, qtdFam):
+        self.carregarNomes()
+        arquivo = open("dados.json","w")
+        flag = 0
 
-if __name__ == "__main__":
-    gen = Gerador()
-    gen.carregarNomes()
-    arquivo = open("dados.json","w")
-    flag = 0
-
-    arquivo.write("[")
-    for i in range(1000):
-        if flag:
-            arquivo.write(",")
-        flag = 1
-        arquivo.write(f"{json.dumps(gen.gerarFamilia(), ensure_ascii=False)}\n")
-    arquivo.write("]")
-    arquivo.close()
+        arquivo.write("[")
+        for i in range(qtdFam):
+            if flag:
+                arquivo.write(",")
+            flag = 1
+            arquivo.write(f"{json.dumps(self.gerarFamilia(), ensure_ascii=False)}\n")
+        arquivo.write("]")
+        arquivo.close()
