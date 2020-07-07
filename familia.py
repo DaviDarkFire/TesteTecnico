@@ -12,7 +12,7 @@ class Familia:
         self.rendas = rendas
         self.status = status
         self.pontos = 0 #indica os pontos da família
-        self.elegivel = Metricas.consegueElegibilidade(self.status) #indica se a família é elegível para participar: 0 não elegível, 1 elegível
+        self.elegivel = Metricas.conseguirElegibilidade(self.status) #indica se a família é elegível para participar: 0 não elegível, 1 elegível
         self.rendaTotal = self.calcRenda()
         self.qtdCriteriosAtendidos = 3 #colocar o máximo e decrementar caso algum não seja atendido
 

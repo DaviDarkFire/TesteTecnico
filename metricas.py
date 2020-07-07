@@ -9,7 +9,7 @@ class Metricas:
         return listaFamilias
 
     @classmethod
-    def consegueElegibilidade(self, status):
+    def conseguirElegibilidade(self, status):
         if (status == 0): #status igual a 0 é o único elegível pra conseguir as casas
             return 1
         return 0 #toda possiblilidade que não seja zero significa não elegível
